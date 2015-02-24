@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/hyper-schema#",
-  "id": "http://oraschema#",
+  "id": "https://raw.githubusercontent.com/Shulamite/rest/master/oraschema#",
   "allOf": [
     {
       "$ref": "http://json-schema.org/draft-04/hyper-schema#"
