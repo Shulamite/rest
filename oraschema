@@ -1,0 +1,710 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+  "id": "http://oraschema#",
+  "allOf": [
+    {
+      "$ref": "http://json-schema.org/draft-04/hyper-schema#"
+    }
+  ],
+
+  "properties": {
+    "o:titlePlural": {
+      "type": "string",
+      "description": "Plural format of the title."
+    },
+    "o:queryable": {
+      "type": "boolean",
+      "default":false,
+      "description": "Boolean flag that specifies whether a property can be used in a query."
+    },
+    "o:sortable": {
+      "type": "boolean",
+      "default":false,
+      "description": "Boolean flag that specifies whether a property can be sorted."
+    },
+    "o:multiLingual":
+    {
+      "type": "boolean",
+      "default":false,
+      "description": "Boolean flag that specifies whether a property value is language-dependent."
+    },
+    "o:lifecycle": {
+      "enum": ["active", "deprecated"],
+      "default":"active",
+      "description": "Life cycle status. Valid values are active or deprecated."
+    },
+    "o:properties": {
+      "type": "array",
+      "description": "Array that contains a link and a list of related property names.",
+      "items": {
+        "type": "string",
+        "description": "Property name."
+      }
+    }
+  },
+
+  "definitions": {
+    "amountType": {
+      "title": "Amount",
+      "type": "object",
+      "properties": {   
+        "value": {
+          "description":"Numeric value that specifies an amount.",
+          "type": "number"
+        },
+        "unit": {
+          "description": "Unit of measure, such as meter, pound, each, and so on.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of how to use the object.",
+          "type": "string"
+        }
+      },
+      "required": ["value","unit"]
+    },
+    "currencyType": {
+      "title": "Currency",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description":"Numeric value that specifies a currency.",
+          "type": "number"
+        },
+        "currency": {
+          "description": "ISO 4217 currency code.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of how to use the object.",
+          "type": "string"
+        }
+      },
+      "required": ["value","currency"]
+    },
+    "dateTimeType": {
+      "title": "DateTime",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description":"Date in ISO 8601 format.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "description": "Timezone in Olson database format.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of how to use the object.",
+          "type": "string"
+        }
+      },
+      "required": ["value"]
+    },
+    "exceptionDetailType": {
+      "title": "Error Detail",
+      "description": "Complex type that contains error details for a REST call.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Absolute URI [RFC3986] that identifies the problem type.  When dereferenced, it SHOULD provide a human-readable summary of the problem (for example, using HTML)."
+         },
+        "title": {
+          "type": "string",
+          "description": "Short, human-readable summary of the problem.  The summary SHOULD NOT change for subsequent occurrences of the problem, except for purposes of localization."
+        },
+        "status": {
+          "type": "integer",
+          "description": "HTTP status code for this occurrence of the problem, set by the origin server."
+        },
+        "detail": {
+          "type": "string",
+          "description": "Human-readable description specific to this occurrence of the problem."
+        },
+        "instance": {
+          "type": "string",
+          "description": "Absolute URI that identifies the specific occurrence of the problem.  It may or may not provide additional information if dereferenced."
+        },
+        "o:errorCode": {
+          "type": "string",
+          "description": "Application error code, which is different from HTTP error code."
+        },
+        "o:errorPath": {
+          "type": "string",
+          "description": "Path to the problem at the resource or property level."
+        },
+        "o:errorDetails": {
+          "description": "Details of the error message, consisting of a hierarchical tree structure.",
+          "type": "array",
+          "items": {"$ref": "#/definitions/exceptionDetailType"}
+        }
+      },
+      "required": ["type", "title"]
+    },
+
+    "instanceLink": {
+      "type": "object",
+      "description": "Metadata describing link description objects that MAY appear in the JSON instance representation.",
+      "properties": {
+        "href": {
+          "description": "URI [RFC3986] or URI Template [RFC6570]. If the value is set to URI Template, then the \"templated\" property must be set to true.",
+          "type": "string"
+        },
+        "rel": {
+          "description": "Name of the link relation that, in addition to the type property, can be used to retrieve link details. For example, href or profile.",
+          "type": "string"
+        },
+        "templated":
+        {
+          "description": "Boolean flag that specifies that \"href\" property is a URI or URI Template. If the property is a URI template, set this value to true. By default, this value is false.",
+          "type": "boolean"
+        },
+        "mediaType":
+        {
+          "description": "Media type, as defined by RFC 2046, describing the link target.",
+          "type": "string"
+        },
+        "method":
+        {
+          "description": "HTTP method for requesting the target of the link.",
+          "type": "string"
+        },
+        "profile":
+        {
+          "description": "Link to the metadata of the resource, such as JSON-schema, that describes the resource expected when dereferencing the target resource..",
+          "type": "string"
+        }
+      },
+      "required": ["href", "rel"]
+    },
+
+    "expandQueryParam": {
+      "description": "Comma-delimited string of child resource names that you want to expand so that the contents return with the parent in the same GET request.",
+      "type": "string"
+    },
+    "fieldsQueryParam": {
+      "description": "Comma-delimited string of field names that you wanted returned in a GET request.",
+      "type": "string"
+    },
+    "limitQueryParam": {
+      "type": "integer",
+      "description": "Positive integer value that specifies the maximum number of items returned by the server."
+    },
+    "offsetQueryParam": {
+      "type": "integer",
+      "description": "Non-negative integer values that specifies the index of the first item to be returned. The offset index begins at 0. By default, the offset is 0, which returns all items starting from the first item in the collection.",
+      "minimum":0,
+      "default":0
+    },
+    "fromIdQueryParam": {
+      "type": "integer",
+      "description": "Integer value that instructs the server to return items with IDs that are greater than the specified value."
+    },
+    "toIdQueryParam": {
+      "type": "integer",
+      "description": "Integer value that instructs the server to return items with IDs that are less than the specified value."
+    },
+    "sinceQueryParam": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp value that specifies that only items that were created or updated after the specified time be returned."
+    },
+    "untilQueryParam": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp value that specifies that only items that were created or updated before the specified time be returned."
+    },
+    "qQueryParam": {
+      "type": "string",
+      "description": "Filter (a “where”clause) to restrict the items returned in the collection. By default, no filtering is applied."
+    },
+    "totalResultsQueryParam": {
+      "description": "Boolean value that specifies whether to calculate the totalResults property. By default, this value is set to false indicating that totalResults is not calculated.",
+      "type": "boolean",
+      "default":false
+    },
+    "orderByQueryParam": {
+      "description": "Comma-separated string of field names, each optionally followed by asc or desc, that specifies the order of items returned in the response payload." ,
+      "type": "string"
+    },
+    "linksQueryParam": {
+      "type": "string",
+      "description": "Comma-separated list of relation types that are returned in a GET request. By default, all links are returned."
+    },
+
+    "totalResultsProp": {
+      "type": "integer",
+      "description": "Total count of the resource instances, including both the instances in the current range and the instances on the server that satisfy the request."
+    },
+    "limitProp": {
+      "type": "integer",
+      "description": "Actual paging size used by the server."
+    }, 
+    "countProp": {
+      "type": "integer",
+      "description": "Number of resource instances returned in the current range."
+    }, 
+    "hasMoreProp": {
+      "type": "boolean",
+      "description": "Boolean value that is set to true if more resources are available on the server than the subset returned in current page."
+    },
+    "offsetProp": {
+      "type": "integer",
+      "description": "Offset value used in the current page. "
+    }, 
+
+    "queryParams": {
+      "description": "Metadata describing common schema properties of an API (for example, Query Parameters). Each property can be individually referred to by its 'id' property, using JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-00).",
+      "type": "object",
+      "properties":
+      {
+        "expand": {
+          "$ref": "#/definitions/expandQueryParam"
+        },
+        "fields": {
+          "$ref": "#/definitions/fieldsQueryParam"
+        },
+        "limit": {
+          "$ref": "#/definitions/limitQueryParam"
+        },
+        "offset": {
+          "$ref": "#/definitions/offsetQueryParam"
+        },
+        "fromId": {
+          "$ref": "#/definitions/fromIdQueryParam"
+        },
+        "toId": {
+          "$ref": "#/definitions/toIdQueryParam"
+        },
+        "since": {
+          "$ref": "#/definitions/sinceQueryParam"
+        },
+        "until": {
+          "$ref": "#/definitions/untilQueryParam"
+        },
+        "q": {
+          "$ref": "#/definitions/qQueryParam"
+        },
+        "totalResults": {
+          "$ref": "#/definitions/totalResultsQueryParam"
+        },
+        "orderBy": {
+          "$ref": "#/definitions/orderByQueryParam"
+        },
+        "links": {
+          "$ref": "#/definitions/linksQueryParam"
+        }
+      }
+    },
+
+    "singularResource": {
+      "title": "Singular Resource",
+      "description": "Oracle base singular resource schema definition.",
+      "type": "object",
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/instanceLink"
+          }
+        }
+      },
+      "links": [
+        {
+          "href": "#",
+          "rel": "describedby"
+        }
+      ]
+    },
+
+    "collectionBaseResource": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/singularResource"
+        }
+      ],
+      "title": "Base Collection Resource",
+      "description": "Oracle base collection resource schema definition. ",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "collectionPagedResource": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/collectionBaseResource"
+        }
+      ],
+      "title": "Collection Paging Resource",
+      "description": "Oracle base collection resource schema definition. ",
+      "properties": {
+        "hasMore": {
+          "$ref": "#/definitions/hasMoreProp"
+        },
+        "totalResults": {
+          "$ref": "#/definitions/totalResultsProp"
+        },
+        "limit": {
+          "$ref": "#/definitions/limitProp"
+        }, 
+        "count": {
+          "$ref": "#/definitions/countProp"
+        }, 
+        "offset": {
+          "$ref": "#/definitions/offsetProp"
+        }
+      },
+      "links": [
+        {
+          "href": "",
+          "rel": "canonical",
+          "schema":
+          {
+            "$ref": "#/definitions/queryParams"
+          }
+        },
+        {
+          "href": "{next}",
+          "rel": "prev"
+        },
+        {
+          "href": "{prev}",
+          "rel": "next"
+        },
+        {
+          "href": "{first}",
+          "rel": "first"
+        },
+        {
+          "href": "{last}",
+          "rel": "last"
+        }
+      ]
+    },
+
+    "statusResource": {
+      "title": "Job Status",
+      "description": "Captures the status of a long running job.",
+      "type": "object",
+      "allOf": [
+       {"$ref": "#/definitions/singularResource"}
+      ],
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "format": "datatime",
+          "description": "Date-and-time formatted string that specifies the time at which the job started. This property is available only after a job has started."
+         },
+        "endTime": {
+          "type": "string",
+          "format": "datatime",
+          "description": "Date-and-time formatted string that specifies the time at which the job has ended. This property is available only after a job has ended."
+         },
+        "progress": {
+          "enum": ["success", "failed", "processing", "pending"],
+          "description": "enum value that specifies the progress of the job. Valid values include: 'succes', 'failed', 'processing', 'pending'"
+         },
+        "completed": {
+          "type": "boolean",
+          "description": "Boolean value that specifies whether the job has been completed."
+         },
+        "requestStatus": {
+          "type": "number",
+          "description": "Numeric value that specifies the HTTP status code of the original job request. This is not equivalent to the polling request status. This property is available only after the job completes."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable message that describes the current processing status."
+        },
+        "completedPercentage": {
+          "type": "number",
+          "description": "Numeric value between 0 and 100 that specifies the percentage that the job is complete."
+        },
+        "intervalToPoll": {
+          "type": "number",
+          "description": "Numeric value that specifies the number of milliseconds to wait before rechecking the status of a job."
+        },
+        "error": {
+          "$ref": "#/definitions/exceptionDetailType",
+          "description": "String that specifies the exception detail of the original request. This value is available only when a job has completed and failed."
+        },
+        "links": {
+          "type": "array",
+          "item": {
+            "$ref": "#/definitions/link"
+          },
+          "description": "Array of links to the related resources. This property value is inherited from the singular resource. If a server supports the cancelling of a request, then there may be a link with rel=abort that client can use to cancel the job."
+        }
+      },
+      "required": ["progress"]
+    },
+
+    "opType": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "http://json-schema.org/draft-04/schema#/definitions/stringArray",
+          "description": "Strings used in this custom query format to represent an operator."
+        },
+        "types": {
+          "type": "array",
+          "items": {
+            "$ref": "http://json-schema.org/draft-04/schema#/definitions/simpleTypes"
+          },
+          "description": "Types of properties that are applicable for this operator. For example, startWith applies to string only."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the function of the operator."
+        },
+        "example": {
+          "type": "string",
+          "description": "Example of how to use the operator."
+        }
+      }
+    },
+    "searchFormResource": {
+      "title": "Search form resource",
+      "description": "Description of the query syntax.",
+      "type": "object",
+      "allOf": [
+       {"$ref": "#/definitions/singularResource"}
+      ],
+     "properties": {
+        "syntax": {
+          "type": "object",
+          "properties": {
+            "operators": {
+                "type": "object",
+                "description": "Operators supported by the custom query format.",
+                "properties": {
+                  "eq": {
+                    "$ref": "#/definitions/opType",
+                    "description": "equal"
+                  },
+                  "ne": {
+                    "$ref": "#/definitions/opType",
+                    "description": "not equal"
+                  },
+                  "gt": {
+                    "$ref": "#/definitions/opType",
+                    "description": "greater"
+                  },
+                  "lt": {
+                    "$ref": "#/definitions/opType",
+                    "description": "less than"
+                  },
+                  "ge": {
+                    "$ref": "#/definitions/opType",
+                    "description": "greater or equal"
+                  },
+                  "le": {
+                    "$ref": "#/definitions/opType",
+                    "description": "less than or equal"
+                  },
+                  "co": {
+                    "$ref": "#/definitions/opType",
+                    "description": "contains"
+                  },
+                  "sw": {
+                    "$ref": "#/definitions/opType",
+                    "description": "startWith"
+                  },
+                  "ew": {
+                    "$ref": "#/definitions/opType",
+                    "description": "end with"
+                  },
+                  "pr": {
+                    "$ref": "#/definitions/opType",
+                    "description": "is not null"
+                  }
+                }
+            },
+            "logicalOperators": {
+              "type": "object",
+              "description": "Logical operators supported.",
+              "properties": {
+                "and": {
+                    "$ref": "#/definitions/opType",
+                    "description": "logical and"
+                },
+                "or": {
+                    "$ref": "#/definitions/opType",
+                    "description": "logical or"
+                },
+                "not": {
+                    "$ref": "#/definitions/opType",
+                    "description": "logical not"
+                }
+              }
+            },
+            "termDelimiter": {
+              "$ref": "http://json-schema.org/draft-04/schema#/definitions/stringArray",
+              "description": "Strings that can be used to delimit items."
+           },
+           "precedenceGrouping": {
+               "type": "string",
+               "description": "Strings that can be used to group terms."
+           }
+          }
+        },
+        "propertyOperators": {
+           "type": "object",
+           "description": "Operators that can be applied for a particular property"
+        }
+      },
+      "required": ["syntax"]
+    },
+
+    "createFormResource": {
+      "title": "A create-form resource",
+      "description": "Template used to create a new resource. The resource contains properties with default values.",
+      "type": "object",
+      "allOf": [
+       {"$ref": "#/definitions/singularResource"}
+      ]
+    },
+
+    "editFormResource": {
+      "title": "An edit-form resource",
+      "description": "Template used to update a resource. The resource contains properties that can be modified.",
+      "type": "object",
+      "allOf": [
+       {"$ref": "#/definitions/singularResource"}
+      ]
+    },
+
+    "resourceMeta": {
+      "description": "Describes metadata for a resource.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/singularResource"
+        }
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Resource name."
+        }
+      },
+      "required": ["name"],
+      "links": [
+        {
+          "href": "../../{name}",
+          "rel": "describes"
+        },
+        {
+          "href": "",
+          "rel": "alternate",
+          "description": "Link that provides the JSON schema of the resource.",
+          "mediaType": "application/schema+json"
+        }
+      ]
+    },
+
+    "metadataCatalogResource": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/collectionBaseResource"
+        }
+      ],
+      "description": "List of metadata for resources.",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/resourceMeta"
+          }
+        }
+      }
+    },
+
+    "versionResource": {
+      "allOf": [
+        {
+        "$ref": "#/definitions/singularResource"
+        }
+      ],
+      "description": "Life cycle information describing a specific API version.",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version unique identifier."
+        },
+        "predecessor": {
+          "type": "string"
+        },
+        "successor": {
+          "type": "string"
+        },
+        "lifecycle": {
+          "description": "Current life cycle of the API.",
+          "type": "string",
+          "enum": ["deprecated", "active", "future"],
+          "default": "active"
+        },
+        "isLatest": {
+          "type": "boolean",
+          "default":false
+        },
+        "terminationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "metadata-catalog": {
+          "$ref": "#/definitions/metadataCatalogResource"
+        }
+      },
+      "required": ["version"],
+      "links": [
+        {
+          "href": "../{predecessor}",
+          "rel": "predecessor-version"
+        },
+        {
+          "href": "../{successor}",
+          "rel": "successor-version"
+        }
+      ]
+    },
+
+    "rootResource": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/collectionBaseResource"
+        }
+      ],
+      "description": "Collection resource describing a list of versions of an API.",
+      "properties": {
+        "items": {
+          "description": "Collection of versions supported for this API.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/versionResource"
+          }
+        },
+        "current": {
+          "type": "string",
+          "readOnly":true
+        }
+      },
+      "links": [
+        {
+          "description": "Relation type that returns the current version of this API.",
+          "href": "{current}",
+          "rel": "current"
+        }
+      ]
+    }
+
+  }
+
+}
