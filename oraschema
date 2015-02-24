@@ -697,6 +697,7 @@
         }
       },
       "required": ["items", "current", "links"],
+      "additionalProperties": false,
       "links": [
         {
           "description": "Relation type that returns the current version of this API.",
