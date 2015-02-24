@@ -662,7 +662,6 @@
         "metadata-catalog": {
           "$ref": "#/definitions/metadataCatalogResource"
         },
-        "required": ["version"]
       },
       "required": ["version"],
       "links": [
@@ -695,9 +694,9 @@
         "current": {
           "type": "string",
           "readOnly":true
-        },
-        "required": ["items", "current", "links"]
+        }
       },
+      "required": ["items", "current", "links"],
       "links": [
         {
           "description": "Relation type that returns the current version of this API.",
