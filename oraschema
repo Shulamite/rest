@@ -408,8 +408,8 @@
           "description": "Date-and-time formatted string that specifies the time at which the job has ended. This property is available only after a job has ended."
          },
         "progress": {
-          "enum": ["success", "failed", "processing", "pending"],
-          "description": "enum value that specifies the progress of the job. Valid values include: 'succes', 'failed', 'processing', 'pending'"
+          "enum": ["succeeded", "failed", "processing", "pending", "aborted", "paused", "blocked"]
+          "description": "The current progress of the job. These values indicate that the job has ended: succeeded, failed, aborted. The value “blocked” means that the job requires action, such as waiting for a human to approve something. The values that indicate the job is in process are: pending, processing, paused"
          },
         "completed": {
           "type": "boolean",
