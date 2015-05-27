@@ -399,12 +399,12 @@
       "properties": {
         "startTime": {
           "type": "string",
-          "format": "datatime",
+          "format": "date-time",
           "description": "Date-and-time formatted string that specifies the time at which the job started. This property is available only after a job has started."
          },
         "endTime": {
           "type": "string",
-          "format": "datatime",
+          "format": "date-time",
           "description": "Date-and-time formatted string that specifies the time at which the job has ended. This property is available only after a job has ended."
          },
         "progress": {
