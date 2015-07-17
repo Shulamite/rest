@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/hyper-schema#",
-  "id": "http://xmlns.oracle.com/rest/oraschema#",
-  "allOf": [
+    "allOf": [
     {
       "$ref": "http://json-schema.org/draft-04/hyper-schema#"
     }
