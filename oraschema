@@ -414,7 +414,7 @@
                         "links": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/link"
+                                "$ref": "#/definitions/instanceLink"
                             },
                             "description": "Array of links to the related resources. This property value is inherited from the singular resource. If a server supports the cancelling of a request, then there may be a link with rel=abort that client can use to cancel the job."
                         }
