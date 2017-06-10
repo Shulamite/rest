@@ -600,7 +600,7 @@
                         "items": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/editFormResource"
+                                "$ref": "#/definitions/resourceMeta"
                             }
                         }
                     }
