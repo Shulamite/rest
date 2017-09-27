@@ -1,53 +1,9 @@
 {
-    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
-    "description": "Describes Oracle-specific meta properties that extends the official Hypermedia schema.",
-    "allOf": [
-        {
-            "$ref": "http://json-schema.org/draft-04/hyper-schema#"
-        }
-    ],
-
-    "properties": {
-        "o:titlePlural": {
-            "type": "string",
-            "description": "Plural format of the title."
-        },
-        "o:queryable": {
-            "type": "boolean",
-            "default": false,
-            "description": "Boolean flag that specifies whether a property can be used in a query."
-        },
-        "o:sortable": {
-            "type": "boolean",
-            "default": false,
-            "description": "Boolean flag that specifies whether a property can be sorted."
-        },
-        "o:multiLingual":
-                {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Boolean flag that specifies whether a property value is language-dependent."
-                },
-        "o:lifecycle": {
-            "enum": ["active", "deprecated"],
-            "default": "active",
-            "description": "Life cycle status. Valid values are active or deprecated."
-        },
-        "o:properties": {
-            "type": "array",
-            "description": "Array that contains a link and a list of related property names.",
-            "items": {
-                "type": "string",
-                "description": "Property name."
-            }
-        }
-    },
-
     "definitions": {
         "amountType": {
             "title": "Amount",
             "type": "object",
-            "properties": {   
+            "properties": {
                 "value": {
                     "description": "Numeric value that specifies an amount.",
                     "type": "number"
@@ -145,7 +101,6 @@
             },
             "required": ["type", "title"]
         },
-
         "instanceLink": {
             "type": "object",
             "description": "Metadata describing link description objects that MAY appear in the JSON instance representation.",
@@ -181,7 +136,6 @@
             },
             "required": ["href", "rel"]
         },
-
         "expandQueryParam": {
             "description": "Comma-delimited string of child resource names that you want to expand so that the contents return with the parent in the same GET request.",
             "type": "string"
@@ -235,7 +189,6 @@
             "type": "string",
             "description": "Comma-separated list of relation types that are returned in a GET request. By default, all links are returned."
         },
-
         "totalResultsProp": {
             "type": "integer",
             "description": "Total count of the resource instances, including both the instances in the current range and the instances on the server that satisfy the request."
@@ -243,11 +196,11 @@
         "limitProp": {
             "type": "integer",
             "description": "Actual paging size used by the server."
-        }, 
+        },
         "countProp": {
             "type": "integer",
             "description": "Number of resource instances returned in the current range."
-        }, 
+        },
         "hasMoreProp": {
             "type": "boolean",
             "description": "Boolean value that is set to true if more resources are available on the server than the subset returned in current page."
@@ -255,52 +208,7 @@
         "offsetProp": {
             "type": "integer",
             "description": "Offset value used in the current page. "
-        }, 
-
-        "queryParams": {
-            "description": "Metadata describing common schema properties of an API (for example, Query Parameters). Each property can be individually referred to by its 'id' property, using JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-00).",
-            "type": "object",
-            "properties":
-                    {
-                        "expand": {
-                            "$ref": "#/definitions/expandQueryParam"
-                        },
-                        "fields": {
-                            "$ref": "#/definitions/fieldsQueryParam"
-                        },
-                        "limit": {
-                            "$ref": "#/definitions/limitQueryParam"
-                        },
-                        "offset": {
-                            "$ref": "#/definitions/offsetQueryParam"
-                        },
-                        "fromId": {
-                            "$ref": "#/definitions/fromIdQueryParam"
-                        },
-                        "toId": {
-                            "$ref": "#/definitions/toIdQueryParam"
-                        },
-                        "since": {
-                            "$ref": "#/definitions/sinceQueryParam"
-                        },
-                        "until": {
-                            "$ref": "#/definitions/untilQueryParam"
-                        },
-                        "q": {
-                            "$ref": "#/definitions/qQueryParam"
-                        },
-                        "totalResults": {
-                            "$ref": "#/definitions/totalResultsQueryParam"
-                        },
-                        "orderBy": {
-                            "$ref": "#/definitions/orderByQueryParam"
-                        },
-                        "links": {
-                            "$ref": "#/definitions/linksQueryParam"
-                        }
-                    }
         },
-
         "singularResource": {
             "title": "Singular Resource",
             "description": "Oracle base singular resource schema definition.",
@@ -314,15 +222,15 @@
                 }
             }
         },
-
         "collectionBaseResource": {
+            "title": "Base Collection Resource",
+            "description": "Oracle base collection resource schema definition. ",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "title": "Base Collection Resource",
-                    "description": "Oracle base collection resource schema definition. ",
+                    "type": "object",
                     "properties": {
                         "items": {
                             "type": "array",
@@ -335,13 +243,14 @@
             ]
         },
         "collectionPagedResource": {
+            "title": "Collection Paging Resource",
+            "description": "Oracle base collection resource schema definition. ",
             "allOf": [
                 {
                     "$ref": "#/definitions/collectionBaseResource"
                 },
                 {
-                    "title": "Collection Paging Resource",
-                    "description": "Oracle base collection resource schema definition. ",
+                    "type": "object",
                     "properties": {
                         "hasMore": {
                             "$ref": "#/definitions/hasMoreProp"
@@ -351,26 +260,25 @@
                         },
                         "limit": {
                             "$ref": "#/definitions/limitProp"
-                        }, 
+                        },
                         "count": {
                             "$ref": "#/definitions/countProp"
-                        }, 
+                        },
                         "offset": {
                             "$ref": "#/definitions/offsetProp"
                         }
                     }
                 }
-            ]  
+            ]
         },
-
         "statusResource": {
+            "title": "Job Status",
+            "description": "Captures the status of a long running job.",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "title": "Job Status",
-                    "description": "Captures the status of a long running job.",
                     "type": "object",
                     "properties": {
                         "startTime": {
@@ -423,7 +331,6 @@
                 }
             ]
         },
-
         "opType": {
             "type": "object",
             "properties": {
@@ -449,14 +356,13 @@
             }
         },
         "searchFormResource": {
-
+            "title": "Search form resource",
+            "description": "Description of the query syntax.",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "title": "Search form resource",
-                    "description": "Description of the query syntax.",
                     "type": "object",
                     "properties": {
                         "syntax": {
@@ -545,38 +451,43 @@
                 }
             ]
         },
-
         "createFormResource": {
             "title": "A create-form resource",
             "description": "Template used to create a new resource. The resource contains properties with default values.",
-            "type": "object",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                    }
                 }
             ]
         },
-
         "editFormResource": {
+            "title": "An edit-form resource",
+            "description": "Template used to update a resource. The resource contains properties that can be modified.",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "title": "An edit-form resource",
-                    "description": "Template used to update a resource. The resource contains properties that can be modified.",
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                    }
                 }
             ]
         },
-
         "resourceMeta": {
+            "title": "Schema resource",
+            "description": "Describes metadata for a resource.",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "description": "Describes metadata for a resource.",
+                    "type": "object",
                     "properties": {
                         "name": {
                             "type": "string",
@@ -587,15 +498,15 @@
                 }
             ]
         },
-
         "metadataCatalogResource": {
+            "title": "Catalog Resource",
+            "description": "List of metadata for resources.",
             "allOf": [
                 {
                     "$ref": "#/definitions/collectionBaseResource"
                 },
                 {
                     "type": "object",
-                    "description": "List of metadata for resources.",
                     "properties": {
                         "items": {
                             "type": "array",
@@ -607,14 +518,15 @@
                 }
             ]
         },
-
         "versionResource": {
+            "title": "Version Resource",
+            "description": "Life cycle information describing a specific API version.",
             "allOf": [
                 {
                     "$ref": "#/definitions/singularResource"
                 },
                 {
-                    "description": "Life cycle information describing a specific API version.",
+                    "type": "object",
                     "properties": {
                         "version": {
                             "type": "string",
@@ -644,18 +556,29 @@
                             "$ref": "#/definitions/metadataCatalogResource"
                         }
                     },
-                    "required": ["version"]
+                    "required": ["version"],
+                    "x-links": [
+                        {
+                            "href": "../{predecessor}",
+                            "rel": "predecessor-version"
+                        },
+                        {
+                            "href": "../{successor}",
+                            "rel": "successor-version"
+                        }
+                    ]
                 }
             ]
         },
-
         "rootResource": {
+            "title": "API Root Resource",
+            "description": "Collection resource describing a list of versions of an API.",
             "allOf": [
                 {
                     "$ref": "#/definitions/collectionBaseResource"
                 },
                 {
-                    "description": "Collection resource describing a list of versions of an API.",
+                    "type": "object",
                     "properties": {
                         "items": {
                             "description": "Collection of versions supported for this API.",
@@ -668,10 +591,16 @@
                             "type": "string",
                             "readOnly": true
                         }
-                    }
+                    },
+                    "x-links": [
+                        {
+                            "description": "Relation type that returns the current version of this API.",
+                            "href": "{current}",
+                            "rel": "current"
+                        }
+                    ]
                 }
             ]
         }
     }
 }
-
