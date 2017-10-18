@@ -138,7 +138,7 @@
         },
         "expandQueryParam": {
             "name": "expand",
-            "type": "query",
+            "in": "query",
             "description": "Comma-delimited string of child resource names that you want to expand so that the contents return with the parent in the same GET request.",
             "type": "string"
         },
