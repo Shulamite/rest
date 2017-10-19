@@ -1,4 +1,83 @@
 {
+    "parameters": {
+        "expandQueryParam": {
+            "name": "expand",
+            "in": "query",
+            "description": "Comma-delimited string of child resource names that you want to expand so that the contents return with the parent in the same GET request.",
+            "type": "string"
+        },
+        "fieldsQueryParam": {
+            "name": "fields",
+            "in": "query",
+            "description": "Comma-delimited string of field names that you wanted returned in a GET request.",
+            "type": "string"
+        },
+        "limitQueryParam": {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "description": "Positive integer value that specifies the maximum number of items returned by the server."
+        },
+        "offsetQueryParam": {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "description": "Non-negative integer values that specifies the index of the first item to be returned. The offset index begins at 0. By default, the offset is 0, which returns all items starting from the first item in the collection.",
+            "minimum": 0,
+            "default": 0
+        },
+        "fromIdQueryParam": {
+            "name": "fromId",
+            "in": "query",
+            "type": "integer",
+            "description": "Integer value that instructs the server to return items with IDs that are greater than the specified value."
+        },
+        "toIdQueryParam": {
+            "name": "toId",
+            "in": "query",
+            "type": "integer",
+            "description": "Integer value that instructs the server to return items with IDs that are less than the specified value."
+        },
+        "sinceQueryParam": {
+            "name": "since",
+            "in": "query",
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp value that specifies that only items that were created or updated after the specified time be returned."
+        },
+        "untilQueryParam": {
+            "name": "until",
+            "in": "query",
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp value that specifies that only items that were created or updated before the specified time be returned."
+        },
+        "qQueryParam": {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "description": "Filter (a “where”clause) to restrict the items returned in the collection. By default, no filtering is applied."
+        },
+        "totalResultsQueryParam": {
+            "name": "totalResults",
+            "in": "query",
+            "description": "Boolean value that specifies whether to calculate the totalResults property. By default, this value is set to false indicating that totalResults is not calculated.",
+            "type": "boolean",
+            "default": false
+        },
+        "orderByQueryParam": {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Comma-separated string of field names, each optionally followed by asc or desc, that specifies the order of items returned in the response payload.",
+            "type": "string"
+        },
+        "linksQueryParam": {
+            "name": "links",
+            "in": "query",
+            "type": "string",
+            "description": "Comma-separated list of relation types that are returned in a GET request. By default, all links are returned."
+        }
+    },
     "definitions": {
         "amountType": {
             "title": "Amount",
@@ -137,8 +216,6 @@
             "required": ["href", "rel"]
         },
         "expandQueryParam": {
-            "name": "expand",
-            "in": "query",
             "description": "Comma-delimited string of child resource names that you want to expand so that the contents return with the parent in the same GET request.",
             "type": "string"
         },
